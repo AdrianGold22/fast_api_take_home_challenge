@@ -1,0 +1,31 @@
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Variables de entorno y credenciales (NUNCA subir)
+.env
+.env.*
+!.env.example
+
+# Archivos compilados y caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Caché de Pytest
+.pytest_cache/
+.coverage
+
+# Bases de datos locales (por si se genera algún archivo SQLite)
+*.db
+*.sqlite3
+
+# Volúmenes locales de PostgreSQL en Docker (si los montaste en carpeta)
+postgres_data/
+pgdata/
+
+# Configuración local del editor y sistema operativo
+.vscode/
+.DS_Store
+Thumbs.db
