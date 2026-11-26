@@ -10,4 +10,4 @@ You have to build a microservice that exposes an RESt api
 
 # How to run the app
 
-Ejecutar docker compose -f app/docker-compose.yml up
+Ejecutar docker compose -f app/docker-compose.yml up --build

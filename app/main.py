@@ -7,10 +7,11 @@ from typing import Annotated
 import httpx2
 from app.routers.user_router import user_router
 from app.routers.deps.client_session import HttpClientDep
-SQLModel.metadata.create_all(engine)
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    SQLModel.metadata.create_all(engine)
     app.state.http_client = httpx2.AsyncClient(
         timeout=httpx2.Timeout(10.0),
         headers={"Accept": "application/json"}

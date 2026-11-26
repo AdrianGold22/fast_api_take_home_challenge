@@ -1,4 +1,4 @@
-version: '3'
+
 
 services:
 
@@ -30,6 +30,9 @@ services:
       - ../.env
     environment:
       POSTGRES_SERVER: postgres_db
+    depends_on:
+      postgres_db:
+        condition: service_healthy
     volumes:
       - ./:/app/app 
 

@@ -1,0 +1,56 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      - image: cimg/python:3.12
+    environment:
+      POSTGRES_USER: ci_user
+      POSTGRES_PASSWORD: ci_password
+      POSTGRES_SERVER: localhost
+      POSTGRES_DB: ci_db
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - v1-deps-{{ checksum "app/requirements.txt" }}
+            - v1-deps-
+
+      - run:
+          name: Instalar dependencias
+          command: |
+            python -m venv .venv
+            . .venv/bin/activate
+            pip install --upgrade pip
+            pip install -r app/requirements.txt
+            pip install pytest
+
+      - save_cache:
+          paths:
+            - ./.venv
+          key: v1-deps-{{ checksum "app/requirements.txt" }}
+
+      - run:
+          name: Ejecutar pruebas con pytest
+          command: |
+            . .venv/bin/activate
+            pytest -v
+
+  build-docker:
+    docker:
+      - image: cimg/base:current
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Verificar construcción de imagen Docker
+          command: docker build -t image-fastapi ./app
+
+workflows:
+  ci-pipeline:
+    jobs:
+      - test
+      - build-docker:
+          requires:
+            - test
