@@ -14,8 +14,8 @@ jobs:
 
       - restore_cache:
           keys:
-            - v1-deps-{{ checksum "app/requirements.txt" }}
-            - v1-deps-
+            - v2-deps-{{ checksum "app/requirements.txt" }}
+            - v2-deps-
 
       - run:
           name: Instalar dependencias
@@ -24,18 +24,19 @@ jobs:
             . .venv/bin/activate
             pip install --upgrade pip
             pip install -r app/requirements.txt
-            pip install pytest
+            pip install pytest pytest-cov coveralls
 
       - save_cache:
           paths:
             - ./.venv
-          key: v1-deps-{{ checksum "app/requirements.txt" }}
+          key: v2-deps-{{ checksum "app/requirements.txt" }}
 
       - run:
-          name: Ejecutar pruebas con pytest
+          name: Ejecutar pruebas y enviar cobertura a Coveralls
           command: |
             . .venv/bin/activate
-            pytest -v
+            pytest --cov=app --cov-report=term-missing -v
+            coveralls
 
   build-docker:
     docker:
